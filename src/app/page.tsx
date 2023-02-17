@@ -1,10 +1,21 @@
+'use client'
+
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from './page.module.css'
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const [name, setName] = useState<string | null>(null);
+  const onClickButton = () => {
+    fetch('/api/hello')
+      .then((res) => res.json())
+      .then((data) => setName(data.name))
+      .catch((err) => console.log(err));
+  }
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -42,6 +53,10 @@ export default function Home() {
         />
         <div className={styles.thirteen}>
           <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
+          <button type='button' onClick={onClickButton}>Click me</button>
+          {
+            name && <div id="alert">{name}</div>
+          }
         </div>
       </div>
 
