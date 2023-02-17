@@ -8,9 +8,14 @@ Given("I am on the landing page", () => {
 });
 
 Given(
-  "the api request url {string} and the verb {string} returns the fixture {string}",
-  (apiUrl: string, verb: Method, fixture: string) => {
-    cy.intercept(verb, apiUrl, { fixture }).as(`${verb}${apiUrl}`);
+  "the api request url {string} and the verb {string} returns the fixture {string} with a status code of {int}",
+  (apiUrl: string, verb: Method, fixture: string, statusCode: number) => {
+    cy.intercept(verb, apiUrl, (req) => {
+      req.reply((res) => {
+        res.statusCode = statusCode;
+        res.send({ fixture });
+      });
+    }).as(`${verb}${apiUrl}`);
   }
 );
 
